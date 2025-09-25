@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: elysia-ecommerce
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    numInstances: 1
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 3000

@@ -1,0 +1,28 @@
+{
+  "name": "elysia-ecommerce",
+  "version": "1.0.0",
+  "description": "Ecommerce API built with Elysia.js and MongoDB",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist",
+    "test": "bun test"
+  },
+  "keywords": ["elysia", "ecommerce", "mongodb", "typescript"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "elysia": "^0.8.17",
+    "@elysiajs/swagger": "^0.8.0",
+    "@elysiajs/cors": "^0.8.0",
+    "mongoose": "^8.0.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "bun-types": "latest"
+  }
+}

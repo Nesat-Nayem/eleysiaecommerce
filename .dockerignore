@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+bun.lockb
+.git
+.gitignore
+.env
+Dockerfile
+.dockerignore
+dist
+coverage
+.cache
+.parcel-cache
+.next
+.nuxt
+out
+.vscode
+.DS_Store
