@@ -5,8 +5,11 @@ import { connectDB } from './config/database';
 import { userRoutes } from './routes/userRoutes';
 import { productRoutes } from './routes/productRoutes';
 
-// Load environment variables
+// Load environment variables - Railway provides PORT dynamically
 const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+console.log(`🔧 Starting server on ${HOST}:${PORT}`);
 
 const app = new Elysia()
   .use(cors({
@@ -28,8 +31,10 @@ const app = new Elysia()
       ],
       servers: [
         {
-          url: `http://localhost:${PORT}`,
-          description: 'Development server'
+          url: process.env.NODE_ENV === 'production' 
+            ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'localhost'}`
+            : `http://localhost:${PORT}`,
+          description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server'
         }
       ]
     },
@@ -42,12 +47,15 @@ const app = new Elysia()
     endpoints: {
       users: '/api/users',
       products: '/api/products'
-    }
+    },
+    environment: process.env.NODE_ENV || 'development'
   }))
   .get('/health', () => ({
     status: 'OK',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    port: PORT,
+    host: HOST
   }))
   .use(userRoutes)
   .use(productRoutes)
@@ -75,17 +83,32 @@ const app = new Elysia()
           message: 'Internal server error'
         };
     }
-  })
-  .listen(PORT);
+  });
 
-// Connect to MongoDB
-connectDB().then(() => {
-  console.log(`🚀 Elysia Ecommerce API is running at http://localhost:${PORT}`);
-  console.log(`📚 API Documentation available at http://localhost:${PORT}/docs`);
-}).catch((error) => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-});
+// Start server after database connection
+async function startServer() {
+  try {
+    // Connect to MongoDB first
+    await connectDB();
+    console.log('✅ Database connected successfully');
+    
+    // Then start the server
+    app.listen({
+      port: PORT,
+      hostname: HOST
+    });
+    
+    console.log(`🚀 Elysia Ecommerce API is running at http://${HOST}:${PORT}`);
+    console.log(`📚 API Documentation available at http://${HOST}:${PORT}/docs`);
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
