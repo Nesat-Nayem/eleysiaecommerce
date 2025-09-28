@@ -107,8 +107,13 @@ async function startServer() {
   }
 }
 
-// Start the server
-startServer();
+// Start the server (guard against double starts within the same process)
+if (!(globalThis as any).__SERVER_STARTED__) {
+  (globalThis as any).__SERVER_STARTED__ = true;
+  startServer();
+} else {
+  console.warn('Server already started - skipping duplicate start');
+}
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
