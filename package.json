@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir ./dist",
     "test": "bun test"
   },
   "keywords": ["elysia", "ecommerce", "mongodb", "typescript"],
