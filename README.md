@@ -1,4 +1,4 @@
-# Elysia Ecommerce API
+# Elysia Ecommerce API V1
 
 A modern, high-performance ecommerce API built with Elysia.js, TypeScript, and MongoDB. Features comprehensive user and product management with full CRUD operations, authentication, and Swagger documentation.
 
